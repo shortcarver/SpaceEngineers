@@ -10,7 +10,7 @@ using Sandbox.Common.ObjectBuilders;
 using VRage;
 using VRage.MyFixedPoint;
 
-namespace SE_Test1
+namespace SpaceEngineers
 {
     class CleanProductionBlocks
     {
