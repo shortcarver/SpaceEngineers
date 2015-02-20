@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BoilerPlate.cs" />
+    <Compile Include="CargoPercent.cs" />
     <Compile Include="CleanAll.cs" />
     <Compile Include="GatherProducts.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
