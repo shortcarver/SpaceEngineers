@@ -30,6 +30,10 @@ namespace InventoryManagement
 
         void Main()
         {
+            maxvol = 0;
+            curvol = 0;
+            trashmaxvol = 0;
+            trashcurvol = 0;
             initBlocks();
 
             for (int i = 0; i < containers.Count; i++)
@@ -50,11 +54,11 @@ namespace InventoryManagement
             }
             if (maxvol > 0)
             {
-                lcd.WritePublicText("Storage: " + ((curvol * 100) / maxvol) + "%", false);
+                lcd.WritePublicText("Storage: " + ((curvol * 100) / maxvol) + "%\n", false);
             }
             else
             {
-                lcd.WritePublicText("Storage: 0%", false);
+                lcd.WritePublicText("Storage: 0%\n", false);
             }
             if (trashmaxvol > 0)
             {
@@ -68,8 +72,10 @@ namespace InventoryManagement
 
         void initBlocks()
         {
+            containers.Clear();
             GridTerminalSystem.GetBlocksOfType<IMyCargoContainer>(containers);
-            lcd = (IMyTextPanel)GridTerminalSystem.GetBlockWithName(lcdname);
+            if (lcd == null)
+                lcd = (IMyTextPanel)GridTerminalSystem.GetBlockWithName(lcdname);
         }
         #endregion
     }

@@ -30,6 +30,9 @@ namespace SpaceEngineers
 
         void initBlocks()
         {
+            oreProcessors.Clear();
+            refineries.Clear();
+            arcFurnaces.Clear();
             GridTerminalSystem.GetBlocksOfType<IMyRefinery>(oreProcessors);
             for (int i = 0; i < oreProcessors.Count; i++)
             {

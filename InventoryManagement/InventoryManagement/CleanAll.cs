@@ -35,6 +35,9 @@ namespace SpaceEngineers
 
         void initBlocks()
         {
+            containers.Clear();
+            refinery_like.Clear();
+            assemblers.Clear();
             GridTerminalSystem.GetBlocksOfType<IMyCargoContainer>(containers);
             GridTerminalSystem.GetBlocksOfType<IMyRefinery>(refinery_like);
             GridTerminalSystem.GetBlocksOfType<IMyAssembler>(assemblers);
