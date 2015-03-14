@@ -21,9 +21,11 @@ namespace SpaceEngineers
         List<IMyTerminalBlock> oreProcessors = new List<IMyTerminalBlock>();
         List<IMyTerminalBlock> refineries = new List<IMyTerminalBlock>();
         List<IMyTerminalBlock> arcFurnaces = new List<IMyTerminalBlock>();
+        List<string> arcMetals = new List<string>();
         void Main()
         {
             initBlocks();
+            redistributeArc();
             redistribute(arcFurnaces);
             redistribute(refineries);
         }
@@ -33,6 +35,7 @@ namespace SpaceEngineers
             oreProcessors.Clear();
             refineries.Clear();
             arcFurnaces.Clear();
+
             GridTerminalSystem.GetBlocksOfType<IMyRefinery>(oreProcessors);
             for (int i = 0; i < oreProcessors.Count; i++)
             {
@@ -47,6 +50,10 @@ namespace SpaceEngineers
                     refineries.Add(oreProcessor);
                 }
             }
+            //Don't know how to extract this from the game, but is unlikely to change
+            arcMetals.Add("Iron");
+            arcMetals.Add("Cobalt");
+            arcMetals.Add("Nickel");
         }
 
         bool redistribute(List<IMyTerminalBlock> blocks)
@@ -81,6 +88,53 @@ namespace SpaceEngineers
             IMyInventory inv = fullest.GetInventory(0);
             inv.TransferItemTo(empty.GetInventory(0), 0, 0, true, inv.GetItems()[0].Amount * 0.5F);
             return false;
+        }
+
+        void redistributeArc()
+        {
+            //Will move arc-able ores from non-empty refineries to empty arc furnaces.
+            List<IMyRefinery> arcShortlist = new List<IMyRefinery>();
+            for (int j=0; j < arcFurnaces.Count; j++) {
+                IMyRefinery arc = (IMyRefinery)arcFurnaces[j];
+                if (arc.GetInventory(0).CurrentMass == 0)
+                {
+                    arcShortlist.Add(arc);
+                }
+            }
+
+            if (arcShortlist.Count == 0)
+            {
+                return;
+            }
+
+            for (int i = 0; i < refineries.Count; i++)
+            {
+                IMyRefinery refinery = (IMyRefinery)refineries[i];
+                int arcIdx = 0;
+                IMyInventory inv = refinery.GetInventory(0);  
+                for (int j = 0; j < inv.GetItems().Count; j++)
+                {
+                    if (arcMetals.Contains(inv.GetItems()[j].Content.SubtypeId.ToString()))
+                    {
+                        IMyRefinery other = arcShortlist[arcIdx];
+                        VRage.MyFixedPoint amount = inv.GetItems()[j].Amount * 0.5F;
+                        if (amount < (VRage.MyFixedPoint)100.0F)
+                        {
+                            //For small amounts stuck high in the queue, it can get stuck dividing
+                            //smaller and smaller chunks that the furnace can process in an instant
+                            amount = inv.GetItems()[j].Amount;
+                        }
+
+                        inv.TransferItemTo(other.GetInventory(0), j, 0, true, amount);
+                        arcIdx += 1;
+                        if (arcIdx >= arcShortlist.Count)
+                        {
+                            return;
+                        }
+
+                    }
+                }
+            }
         }
 
         #endregion
