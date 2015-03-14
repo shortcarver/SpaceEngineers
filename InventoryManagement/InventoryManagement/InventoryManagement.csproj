@@ -62,6 +62,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoSolar.cs" />
     <Compile Include="BoilerPlate.cs" />
     <Compile Include="CargoPercent.cs" />
     <Compile Include="CleanAll.cs" />
