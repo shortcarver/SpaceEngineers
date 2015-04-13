@@ -25,6 +25,10 @@ namespace SpaceEngineers
         List<IMyTerminalBlock> refinery_like = new List<IMyTerminalBlock>();
         List<IMyTerminalBlock> assemblers = new List<IMyTerminalBlock>();
 
+        IMyCargoContainer ORES = null;
+        IMyCargoContainer INGOTS = null;
+        IMyCargoContainer COMPS = null;
+
         void Main()
         {
             initBlocks();
@@ -45,17 +49,19 @@ namespace SpaceEngineers
 
         void cleanOutRefineries()
         {
+            IMyCargoContainer ingots = findCargo(INGOT_STORAGE);
+            IMyCargoContainer ores = findCargo(ORE_STORAGE);
             for (int i = 0; i < refinery_like.Count; i++)
             {
                 IMyRefinery refinery = (IMyRefinery)refinery_like[i];
 
                 // move mats
                 IMyInventory inv = refinery.GetInventory(1);
-                IMyCargoContainer container = findCargo(inv, INGOT_STORAGE);
+                IMyCargoContainer container = getIngots();
                 transferAllTo(inv, container.GetInventory(0));
 
                 inv = refinery.GetInventory(0);
-                container = findCargo(inv, ORE_STORAGE);
+                container = getOres();
                 transferAllTo(inv, container.GetInventory(0));
             }
         }
@@ -68,11 +74,11 @@ namespace SpaceEngineers
 
                 // move parts
                 IMyInventory inv = assem.GetInventory(1);
-                IMyCargoContainer container = findCargo(inv, COMPONENT_STORAGE);
+                IMyCargoContainer container = getComps();
                 transferAllTo(inv, container.GetInventory(0));
 
                 inv = assem.GetInventory(0);
-                container = findCargo(inv, INGOT_STORAGE);
+                container = getIngots();
                 transferAllTo(inv, container.GetInventory(0));
             }
         }
@@ -86,14 +92,58 @@ namespace SpaceEngineers
 
         }
 
-        IMyCargoContainer findCargo(IMyInventory sibling, String type)
+        IMyCargoContainer getIngots()
+        {
+            if (INGOTS == null)
+            {
+                INGOTS = findCargo(INGOT_STORAGE);
+            }
+
+            if (INGOTS.GetInventory(0).CurrentVolume.RawValue * 100 / INGOTS.GetInventory(0).MaxVolume.RawValue > 90)
+            {
+                INGOTS = findCargo(INGOT_STORAGE);
+            }
+            return INGOTS;
+        }
+
+        IMyCargoContainer getComps()
+        {
+            if (COMPS == null)
+            {
+                COMPS = findCargo(COMPONENT_STORAGE);
+            }
+
+            if (COMPS.GetInventory(0).CurrentVolume.RawValue * 100 / COMPS.GetInventory(0).MaxVolume.RawValue > 90)
+            {
+                COMPS = findCargo(COMPONENT_STORAGE);
+            }
+            return COMPS;
+        }
+
+        IMyCargoContainer getOres()
+        {
+            if (ORES == null)
+            {
+                ORES = findCargo(ORE_STORAGE);
+            }
+
+            if (ORES.GetInventory(0).CurrentVolume.RawValue * 100 / ORES.GetInventory(0).MaxVolume.RawValue > 90)
+            {
+                ORES = findCargo(ORE_STORAGE);
+            }
+            return ORES;
+        }
+
+        IMyCargoContainer findCargo(String type)
         {
             IMyCargoContainer selected = null;
             for (int i = 0; i < containers.Count; i++)
             {
                 IMyCargoContainer container = (IMyCargoContainer)containers[i];
+                int max = (int)container.GetInventory(0).MaxVolume;
+                int cur = (int)container.GetInventory(0).CurrentVolume;
 
-                if (!container.GetInventory(0).IsFull && sibling.IsConnectedTo(container.GetInventory(0)))
+                if (cur*100/max < 90)
                 {
                     if (container.DisplayNameText.Contains(type))
                     {
