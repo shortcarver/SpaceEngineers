@@ -21,6 +21,7 @@ namespace SpaceEngineers
         List<IMyTerminalBlock> oreProcessors = new List<IMyTerminalBlock>();
         List<IMyTerminalBlock> refineries = new List<IMyTerminalBlock>();
         List<IMyTerminalBlock> arcFurnaces = new List<IMyTerminalBlock>();
+        List<IMyTerminalBlock> o2Gens = new List<IMyTerminalBlock>();
         List<string> arcMetals = new List<string>();
         void Main()
         {
@@ -28,6 +29,7 @@ namespace SpaceEngineers
             redistributeArc();
             redistribute(arcFurnaces);
             redistribute(refineries);
+            redistribute(o2Gens);
         }
 
         void initBlocks()
@@ -50,6 +52,9 @@ namespace SpaceEngineers
                     refineries.Add(oreProcessor);
                 }
             }
+
+            GridTerminalSystem.GetBlocksOfType<IMyOxygenGenerator>(o2Gens);
+
             //Don't know how to extract this from the game, but is unlikely to change
             arcMetals.Add("Iron");
             arcMetals.Add("Cobalt");
@@ -58,12 +63,12 @@ namespace SpaceEngineers
 
         bool redistribute(List<IMyTerminalBlock> blocks)
         {
-            IMyRefinery fullest = null;
+            IMyTerminalBlock fullest = null;
             long fullestAmount = 0;
-            IMyRefinery empty = null;
+            IMyTerminalBlock empty = null;
             for (int i = 0; i < blocks.Count; i++)
             {
-                IMyRefinery test = (IMyRefinery)blocks[i];
+                IMyTerminalBlock test = (IMyTerminalBlock)blocks[i];
                 long mass = (long)test.GetInventory(0).CurrentMass;
 
                 if (mass == 0)
