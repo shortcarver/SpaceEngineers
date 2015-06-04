@@ -20,6 +20,9 @@ namespace SpaceEngineers
         String INGOT_STORAGE = "Ingot";
         String COMPONENT_STORAGE = "Comp";
 
+        IMyCargoContainer INGOTS = null;
+        IMyCargoContainer COMPS = null;
+
         List<IMyTerminalBlock> containers = new List<IMyTerminalBlock>();
         List<IMyTerminalBlock> refinery_like = new List<IMyTerminalBlock>();
         List<IMyTerminalBlock> assemblers = new List<IMyTerminalBlock>();
@@ -51,7 +54,7 @@ namespace SpaceEngineers
                 IMyInventory inv = refinery.GetInventory(1);
 
                 // move mats
-                IMyCargoContainer container = findCargo(inv, INGOT_STORAGE);
+                IMyCargoContainer container = getIngots();
                 transferAllTo(inv, container.GetInventory(0));
             }
         }
@@ -64,7 +67,7 @@ namespace SpaceEngineers
                 IMyInventory inv = assem.GetInventory(1);
 
                 // move parts
-                IMyCargoContainer container = findCargo(inv, COMPONENT_STORAGE);
+                IMyCargoContainer container = getComps();
                 transferAllTo(inv, container.GetInventory(0));
             }
         }
@@ -75,17 +78,46 @@ namespace SpaceEngineers
             {
                 source.TransferItemTo(dest, 0, null, true, null);
             }
-
         }
 
-        IMyCargoContainer findCargo(IMyInventory sibling, String type)
+        IMyCargoContainer getIngots()
+        {
+            if (INGOTS == null)
+            {
+                INGOTS = findCargo(INGOT_STORAGE);
+            }
+
+            if (INGOTS.GetInventory(0).CurrentVolume.RawValue * 100 / INGOTS.GetInventory(0).MaxVolume.RawValue > 90)
+            {
+                INGOTS = findCargo(INGOT_STORAGE);
+            }
+            return INGOTS;
+        }
+
+        IMyCargoContainer getComps()
+        {
+            if (COMPS == null)
+            {
+                COMPS = findCargo(COMPONENT_STORAGE);
+            }
+
+            if (COMPS.GetInventory(0).CurrentVolume.RawValue * 100 / COMPS.GetInventory(0).MaxVolume.RawValue > 90)
+            {
+                COMPS = findCargo(COMPONENT_STORAGE);
+            }
+            return COMPS;
+        }
+
+        IMyCargoContainer findCargo(String type)
         {
             IMyCargoContainer selected = null;
             for (int i = 0; i < containers.Count; i++)
             {
                 IMyCargoContainer container = (IMyCargoContainer)containers[i];
+                int max = (int)container.GetInventory(0).MaxVolume;
+                int cur = (int)container.GetInventory(0).CurrentVolume;
 
-                if (!container.GetInventory(0).IsFull && sibling.IsConnectedTo(container.GetInventory(0)))
+                if (cur * 100 / max < 90)
                 {
                     if (container.DisplayNameText.Contains(type))
                     {

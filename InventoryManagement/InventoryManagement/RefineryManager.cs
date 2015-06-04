@@ -17,7 +17,6 @@ namespace SpaceEngineers
         IMyGridTerminalSystem GridTerminalSystem = null;
 
         #region CodeEditor
-
         List<IMyTerminalBlock> oreProcessors = new List<IMyTerminalBlock>();
         List<IMyTerminalBlock> refineries = new List<IMyTerminalBlock>();
         List<IMyTerminalBlock> arcFurnaces = new List<IMyTerminalBlock>();
