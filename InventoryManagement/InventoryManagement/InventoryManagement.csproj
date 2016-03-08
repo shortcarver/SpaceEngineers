@@ -51,6 +51,9 @@
     <Reference Include="VRage.Common">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\SteamApps\common\SpaceEngineers\Bin64\VRage.Common.dll</HintPath>
     </Reference>
+    <Reference Include="VRage.Game">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\SteamApps\common\SpaceEngineers\Bin64\VRage.Game.dll</HintPath>
+    </Reference>
     <Reference Include="VRage.Library">
       <HintPath>..\..\..\..\..\..\Program Files (x86)\Steam\SteamApps\common\SpaceEngineers\Bin64\VRage.Library.dll</HintPath>
     </Reference>
