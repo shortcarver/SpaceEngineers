@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Sandbox.ModAPI.Ingame;
 using Sandbox.ModAPI.Interfaces;
 using Sandbox.Definitions;
-using Sandbox.Common.ObjectBuilders;
 using VRage;
 using VRage.MyFixedPoint;
 
@@ -51,7 +50,7 @@ namespace SpaceEngineers
             {
                 IMyRefinery refinery = (IMyRefinery)refinery_like[i];
 
-                IMyInventory inv = refinery.GetInventory(1);
+                VRage.ModAPI.Ingame.IMyInventory inv = refinery.GetInventory(1);
 
                 // move mats
                 IMyCargoContainer container = getIngots();
@@ -64,7 +63,7 @@ namespace SpaceEngineers
             for (int i = 0; i < assemblers.Count; i++)
             {
                 IMyAssembler assem = (IMyAssembler)assemblers[i];
-                IMyInventory inv = assem.GetInventory(1);
+                VRage.ModAPI.Ingame.IMyInventory inv = assem.GetInventory(1);
 
                 // move parts
                 IMyCargoContainer container = getComps();
@@ -72,7 +71,7 @@ namespace SpaceEngineers
             }
         }
 
-        void transferAllTo(IMyInventory source, IMyInventory dest)
+        void transferAllTo(VRage.ModAPI.Ingame.IMyInventory source, VRage.ModAPI.Ingame.IMyInventory dest)
         {
             while (source.GetItems().Count > 0)
             {

@@ -5,7 +5,6 @@ using System.Text;
 using Sandbox.ModAPI.Ingame;
 using Sandbox.ModAPI.Interfaces;
 using Sandbox.Definitions;
-using Sandbox.Common.ObjectBuilders;
 using VRage;
 using VRage.MyFixedPoint;
 

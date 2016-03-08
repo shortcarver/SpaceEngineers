@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Sandbox.ModAPI.Ingame;
 using Sandbox.ModAPI.Interfaces;
 using Sandbox.Definitions;
-using Sandbox.Common.ObjectBuilders;
 using VRage;
 using VRage.MyFixedPoint;
 
@@ -89,7 +88,7 @@ namespace SpaceEngineers
                 return true;
             }
 
-            IMyInventory inv = fullest.GetInventory(0);
+            VRage.ModAPI.Ingame.IMyInventory inv = fullest.GetInventory(0);
             inv.TransferItemTo(empty.GetInventory(0), 0, 0, true, inv.GetItems()[0].Amount * 0.5F);
             return false;
         }
@@ -115,7 +114,7 @@ namespace SpaceEngineers
             {
                 IMyRefinery refinery = (IMyRefinery)refineries[i];
                 int arcIdx = 0;
-                IMyInventory inv = refinery.GetInventory(0);  
+                VRage.ModAPI.Ingame.IMyInventory inv = refinery.GetInventory(0);  
                 for (int j = 0; j < inv.GetItems().Count; j++)
                 {
                     if (arcMetals.Contains(inv.GetItems()[j].Content.SubtypeId.ToString()))
