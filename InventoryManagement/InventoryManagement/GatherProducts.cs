@@ -86,7 +86,7 @@ namespace SpaceEngineers
                 INGOTS = findCargo(INGOT_STORAGE);
             }
 
-            if (INGOTS.GetInventory(0).CurrentVolume.RawValue * 100 / INGOTS.GetInventory(0).MaxVolume.RawValue > 90)
+            if (INGOTS.GetInventory(0).MaxVolume.RawValue > 0 && INGOTS.GetInventory(0).CurrentVolume.RawValue * 100 / INGOTS.GetInventory(0).MaxVolume.RawValue > 90)
             {
                 INGOTS = findCargo(INGOT_STORAGE);
             }
@@ -100,7 +100,7 @@ namespace SpaceEngineers
                 COMPS = findCargo(COMPONENT_STORAGE);
             }
 
-            if (COMPS.GetInventory(0).CurrentVolume.RawValue * 100 / COMPS.GetInventory(0).MaxVolume.RawValue > 90)
+            if (COMPS.GetInventory(0).MaxVolume.RawValue > 0 && COMPS.GetInventory(0).CurrentVolume.RawValue * 100 / COMPS.GetInventory(0).MaxVolume.RawValue > 90)
             {
                 COMPS = findCargo(COMPONENT_STORAGE);
             }
@@ -116,7 +116,7 @@ namespace SpaceEngineers
                 int max = (int)container.GetInventory(0).MaxVolume;
                 int cur = (int)container.GetInventory(0).CurrentVolume;
 
-                if (cur * 100 / max < 90)
+                if (max > 0 && cur * 100 / max < 90)
                 {
                     if (container.DisplayNameText.Contains(type))
                     {
